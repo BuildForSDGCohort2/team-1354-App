@@ -9,14 +9,14 @@ import * as MediaLibrary from 'expo-media-library'
 import * as Permissions from 'expo-permissions';
 import axios from 'axios'
 
-import {Eng, Hau} from '../constant/eng'
-import Contact from "./Contact";
+import {Eng, Hau} from '../../constant/eng'
 //import { set } from "react-native-reanimated";
-import Geolo from './geo'
+import Geolo from '../geo'
+import Geo2 from '../geo2'
 
 
-const Home = ({navigation}) => {
-  let [lang, setLang] = useState(lang=Eng)
+const Report = ({navigation, uid}) => {
+    let [lang, setLang] = useState(lang=Eng)
     let [incidence, setIncidence] = useState('Fire')
     let [imguri, setImgUri] = useState('')
     let [imguri2, setImgUri2] = useState('')
@@ -25,15 +25,13 @@ const Home = ({navigation}) => {
     let [area, setArea] = useState('')
     let [contact2, setContact2] = useState('')
     let [comment, setComment] = useState('')
+    let [LGA, setLGA] = useState('Birnin Gwari')
+    let [ gps2,setGPS2] = useState('Waiting')
     let [visibility, setVisibility] = useState(false)
-
-
-
-
-
+  let [cause, setCause] = useState('')
 
 useEffect(()=>setImgUri2(''),[])
-const Langu=()=>{
+const Langu = () => {
   setInterval(
     ()=> {
       AsyncStorage.getItem('lang').then((val)=>{
@@ -42,7 +40,6 @@ const Langu=()=>{
     
         }else{
           setLang(Hau)
-    
         }
       })
     
@@ -51,24 +48,32 @@ const Langu=()=>{
   );
 }
 useEffect(()=>Langu(),[])
-useEffect(()=>AsyncStorage.getItem('login').then(v=>{
-  alert(v+ 'll')
-}),[])
-
+useEffect(()=>{AsyncStorage.getItem('login').then(v=>{
+ // alert(v)
+})},[])
 
 
 const about = e => navigation.navigate(e)
+
 const updateIncident =(e)=>{
   setIncidence(e)
 }
+const updateLGA =(e)=>{
+    setLGA(e)
+  }
 const changeArea =(e)=>{
   setArea(e)
 }
-const changeContact =(e)=>{
+const changeContact = (e) => {
   setContact2(e)
+}
+const changeCause = (e) => {
+  setCause(e)
 }
 
 const _takePhoto = async () => {
+
+
   // return alert('jjk')
    const {
      status: cameraPerm
@@ -101,7 +106,7 @@ const _takePhoto = async () => {
      //   alert(pickerResult.uri)
       const manipResult = await _CompressImg(pickerResult.uri)
 setImgUri(manipResult)
-    }else{/*this.setState({uploaded:'cancelled'})*/}
+    }else{}
   } catch (e) {
   } finally {
   }
@@ -148,10 +153,7 @@ const _handleImagePicked1 = async pickerResult => {
   let uploadResponse, uploadResult;
 
   try {
-   /* this.setState({
-        uploaded:'loading...',
-        visible:true
-    });*/
+   
     if (pickerResult) {
    //  return  alert(pickerResult)
       uploadResponse = await uploadImageAsync(pickerResult,1,1);
@@ -162,18 +164,19 @@ const _handleImagePicked1 = async pickerResult => {
        
          await setImgUrl(uploadResult.imgurl)
        
-     }
+     
      if(imgurl!= ''){
       const   data={
         incidence: incidence,
-             uid: 1,
+             uid,
            rtime: new Date(),
              img: imgurl,
              contact: contact2,
              gps: gps,
              address: area,
-             comment: comment
-
+             comment: comment,
+             cause,
+             lga
          }
           // return(alert((data)))
      await    axios.post('https://kd-sema.herokuapp.com/api/v1/reports',data)
@@ -195,6 +198,7 @@ const _handleImagePicked1 = async pickerResult => {
         })
 
      }
+    }
     }else{//this.setState({uploaded:'cancelled',visible:false})
   }
   } catch (e) {
@@ -204,17 +208,10 @@ const _handleImagePicked1 = async pickerResult => {
     setVisibility(false)
 
       alert('Upload failed, sorry :(');
-   /* this.setState({
-      uploaded:'failed',
-      visible:false
-  });*/
+  
   } finally {
     setVisibility(false)
 
- /*   this.setState({
-      uploading: false,
-      visible:false
-    });*/
   }
 };
 
@@ -222,20 +219,22 @@ const handleGps =(e)=>{
   setGPS(e)
 }
 
+const GPS2 = (e)=>{
+  setGPS2(e)
+}
+
  return (
 
-    <View style={styles.center}>
       <ScrollView>
       <View style={styles.container}>
       <ProgressLoader visible={visibility} isModal={true} isHUD={true}
             hudColor={"#000000"} color={"#FFFFFF"}/>
-            <View style={{display:'flex', flexDirection:'row'}}>
-              <TouchableOpacity style={{backgroundColor:'green'}} onPress={()=>{alert('messages')}}><Image src={''} style={{width:100, height:100,}}/></TouchableOpacity>
-              <TouchableOpacity style={{backgroundColor:'blue'}}><Image src={''} style={{width:100, height:100,}}/></TouchableOpacity>
-
-            </View>
-                  <Text style={{margin:20, fontSize:19}}>{lang.welcome}  </Text>
-      <Geolo onGps={handleGps}/>
+       
+                  <Text style={{margin:20, fontSize:19}}>{lang.formtitle}  </Text>
+    <Geolo onGps={handleGps}/>
+    
+  {//   <Geo2 onGPS2={GPS2}/>
+  }
               <Text style={styles.txt}> {lang.incidence} </Text> 
   
         <View>
@@ -245,10 +244,46 @@ const handleGps =(e)=>{
                <Picker.Item label = {lang.accident} value = "Accident" />
             </Picker>
             </View>
+            <Text style={styles.txt}> {lang.cause} </Text> 
+
+              <TextInput  style={styles.box}value={cause} onChangeText = {changeCause} placeholder={lang.cause}/>
+            
+            <View>
+ <Text>{lang.lga}</Text>
+                <Picker style={{borderWidth:4,borderColor:'gray', height: 50, width: 150}} selectedValue = {LGA}  onValueChange = {updateLGA}>
+               <Picker.Item label = {'Birnin Gwari'} value = "Birnin Gwari" />
+               <Picker.Item label ='Giwa'   value='Giwa' /> 
+               <Picker.Item label = 'Igabi'  value='Igabi' />
+               <Picker.Item label = 'Ikara'  value='Ikara' />
+               <Picker.Item label ='Jaba'  value='Jaba' />
+               <Picker.Item label ='Jemaa'  value='Jemaa' />
+               <Picker.Item label ='Kachia'  value='Kachia' />
+               <Picker.Item label = 'Kaduna North'  value='Kaduna North' />
+               <Picker.Item label = 'Kaduna South'  value = 'Kaduna South' />
+               <Picker.Item label = 'Kagarko'  value='Kagarko' />
+               <Picker.Item label='kajuru'  value='Kajuru'/>
+        <Picker.Item label='Kaura'  value='Kaura'/>
+        <Picker.Item label='Kauru'  value='Kauru'/>
+        <Picker.Item label='Kubau'  value='Kubau'/>
+        <Picker.Item label='Kudan'  value='Kudan'/>
+        <Picker.Item label='Lere'  value='Lere'/>
+        <Picker.Item label='Makarfi'  value='Makarfi'/>
+        <Picker.Item label='Sabon Gari'  value='Sabon Gari'/>
+        <Picker.Item label='Sanga'  value='Sanga'/>
+        <Picker.Item label='Soba'  value='Soba'/>
+        <Picker.Item label='Zangon Kataf'  value='Zangon Kataf'/>
+       <Picker.Item label='Zaria' value='Zaria'/>
+
+
+            </Picker>
+   
+ 
+            </View>
      
         <TextInput style={styles.box} placeholder={lang.area} value={area} onChangeText = {changeArea}/>
-        <TextInput style={styles.box} placeholder={lang.contact} value={contact2} onChangeText = { changeContact}/>
-    
+ 
+ {//}       <TextInput style={styles.box} placeholder={lang.contact} value={contact2} onChangeText = { changeContact}/>
+ }
     {imguri2!='' &&    <Image source={{uri: imguri2}}
        style={{width: 150, height: 150}} />}
       <Button title={lang.pic} onPress={()=>_takePhoto() } />
@@ -256,17 +291,11 @@ const handleGps =(e)=>{
               <Text style={styles.txt}> {lang.send} </Text> 
         </TouchableOpacity>
 
- {/*     <RNPickerSelect style={{color:'red'}} onValueChange={this.handleStage}
-items={[
-    {label:'Fire',  value:'Fire'},
-    {label:'Flood', value:'Flood'},
-    {label:'Bandit', value:'Bandit'},
-]}
-/>*/}
+ 
 
       </View>
+ 
       </ScrollView>
-    </View>
   );
 };
 
@@ -303,7 +332,7 @@ async function uploadImageAsync(uri,a,b) {
 
   return await fetch(apiUrl, options)
  
-
+/**/
 }
 
 
@@ -312,13 +341,16 @@ const styles = StyleSheet.create({
   center: {
     flex: 1,
     justifyContent: 'flex-start',
-    alignItems: "center",
+    alignItems: "flex-start",
     textAlign: "center",
+    width:"90%"
+
   },
   container:{
     display:'flex',
     justifyContent:"flex-start",
-    alignItems: "center",
+    alignItems: "flex-start",
+    width:"90%"
     
   },
   updbtn:{
@@ -345,7 +377,7 @@ txt:{
     borderColor: 'grey',
     borderWidth:5,
     borderBottomWidth:2,
-    width: 150,
+    width: "90%",
     marginRight:20,
     borderRadius:4,
     justifyContent:'center',
@@ -354,4 +386,4 @@ txt:{
 });
 
 
-export default Home;
+export default Report;

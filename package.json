@@ -1,21 +1,26 @@
 {
   "dependencies": {
-    "@react-native-community/masked-view": "~0.1.10",
+    "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/drawer": "~5.8.4",
     "@react-navigation/native": "~5.6.1",
     "@react-navigation/stack": "^5.9.0",
     "axios": "^0.20.0",
-    "expo": "~38.0.0",
-    "expo-contacts": "^8.3.0",
-    "react": "~16.11.0",
-    "react-dom": "~16.11.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
-    "react-native-gesture-handler": "~1.6.1",
-    "react-native-reanimated": "~1.9.0",
+    "expo": "^39.0.0",
+    "expo-contacts": "~8.5.0",
+    "expo-image-manipulator": "~8.3.0",
+    "expo-image-picker": "~9.1.0",
+    "expo-location": "^9.0.1",
+    "expo-media-library": "~9.2.1",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.0.tar.gz",
+    "react-native-gesture-handler": "~1.7.0",
+    "react-native-reanimated": "~1.13.0",
     "react-native-router-flux": "^4.2.0",
-    "react-native-safe-area-context": "~3.0.6",
-    "react-native-screens": "~2.9.0",
-    "react-native-web": "0.11.7"
+    "react-native-safe-area-context": "3.1.4",
+    "react-native-screens": "~2.10.1",
+    "react-native-web": "~0.13.7",
+    "rn-progress-loader": "^1.0.8"
   },
   "devDependencies": {
     "@babel/core": "7.9.0"

@@ -1,14 +1,21 @@
 import React, {Component, useState, useEffect} from 'react';
-import { StyleSheet,Text,TextInput, Dimensions,View,FlatList, ScrollView,TouchableOpacity } from 'react-native';
+import { StyleSheet,Text,TextInput,AsyncStorage, Dimensions,View,FlatList, ScrollView,TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { Actions } from 'react-native-router-flux';
 import * as Contacts from 'expo-contacts';
 
 
 
-const Settings =({navigation, route})=>{
+const LanguageSettings =({navigation, route})=>{
 
-    
+    const onEnglish=()=>{
+        AsyncStorage.setItem('lang','Eng')
+        navigation.navigate("Home")
+    }
+    const onHausa=()=>{
+        AsyncStorage.setItem('lang','Hau')
+        navigation.navigate("Home")
+    }
 const FlatListSeparator=()=>{
     return(
         <View style={{height:0.5, backgroundColor:'green', width:'100%'}}/>
@@ -16,26 +23,22 @@ const FlatListSeparator=()=>{
     };
 
     return(
-        <View style={{flex:1, marginTop:'10%'}}>
+        <View style={{flex:1, marginTop:'10%',marginLeft:20}}>
+
+            <Text>Select preffered Language</Text>
                            {FlatListSeparator()}
 
-           <TouchableOpacity onPress={()=>{navigation.navigate('products')}} style={{height:40}}>
+           
+           <TouchableOpacity style={{height:40}} onPress={onEnglish}>
                <Text style={{height:40}}>
-                   My Products
+                   English
                </Text>
                {FlatListSeparator()}
 
            </TouchableOpacity>
-           <TouchableOpacity style={{height:40}}>
+           <TouchableOpacity style={{height:40}} onPress={onHausa}>
                <Text style={{height:40}}>
-                   Account
-               </Text>
-               {FlatListSeparator()}
-
-           </TouchableOpacity>
-           <TouchableOpacity style={{height:40}}>
-               <Text style={{height:40}}>
-                   Settings
+                   Hausa
                </Text>
                {FlatListSeparator()}
 
@@ -84,4 +87,4 @@ const styles = StyleSheet.create ({
     },
 })
 
-export default Settings;
+export default LanguageSettings;
