@@ -9,9 +9,6 @@ const Contact = ({navigation}) => {
       <Text style={styles.txt}>080SEMAZAR</Text>
       <Text style={styles.txt}>080SEMAKAF</Text>
 
-     <Button title='hhhh' onPress={()=>{AsyncStorage.setItem('login','ggg')}}>
-      
-     </Button>
 
     </View>
   );

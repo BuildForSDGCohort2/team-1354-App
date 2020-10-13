@@ -53,7 +53,7 @@ useEffect(()=>{ass},[])
 <Router>
      <Scene key='root'>  
       <Scene key='Onboarding' component={OnBoarding} initial={true}  type='reset' left={()=>null} />
-        <Scene key='Logout' component={SignOut} title='Signout'  type='reset'  left={()=>null}/>
+       <Scene key='Logout' component={SignOut} title='Signout'  type='reset'  left={()=>null}/>
       <Scene key='Signin' component={Signin} title='Signin'  type='reset'  left={()=>null}/>
         <Scene key='Signup' component={Signup} title='Signup'  type='reset'  left={()=>null}/>
        <Scene key='Home' component={HomePage}  title='Home' type='reset' left={()=>null} />
@@ -64,7 +64,7 @@ useEffect(()=>{ass},[])
        <Scene key='Reportchat' component={ReportChat}  title='open report thread'  />
       <Scene key='Home2' component={Home}  title='Hommee'  />
        <Scene key='Openactivities' component={OpenActivities}  title='Open Reports'  />
-
+    
          </Scene>
 </Router>
       
@@ -72,6 +72,24 @@ useEffect(()=>{ass},[])
     );
   }
 
+  const HomeStackNavigator = () => {
+    return (
+      <Stack.Navigator screenOptions={screenOptionStyle}>
+        <Stack.Screen name="Language settings" component={LanguageSettings} />
+        <Stack.Screen name='Logout' component={SignOut} title='Signout'  type='reset'  left={()=>null}/>
+      <Stack.Screen name='Signin' component={Signin} title='Signin'  type='reset'  left={()=>null}/>
+        <Stack.Screen name='Signup' component={Signup} title='Signup'  type='reset'  left={()=>null}/>
+       <Stack.Screen name='Home' component={HomePage}  title='Home' type='reset' left={()=>null} />
+       <Stack.Screen name='Report' component={Report}  title='Reports'  />
+       <Stack.Screen name='Inbox' component={Inbox}  title='inbox'  />
+       <Scene key='geo2' component={geo2}  title='inbox'  />
+       <Stack.Screen name='Closedactivities' component={ClosedActivities}  title='closed activities'  />
+       <Stack.Screen name='Reportchat' component={ReportChat}  title='open report thread'  />
+      <Stack.Screen name='Home2' component={Home}  title='Hommee'  />
+       <Stack.Screen name='Openactivities' component={OpenActivities}  title='Open Reports'  />
+      </Stack.Navigator>
+    );
+  }
   const SettingsStackNavigator = () => {
     return (
       <Stack.Navigator screenOptions={screenOptionStyle}>
@@ -88,6 +106,15 @@ useEffect(()=>{ass},[])
     );
     
   }
+  const SignoutStackNavigator = () => {
+    return (
+      <Stack.Navigator screenOptions={screenOptionStyle}>
+        <Stack.Screen name="Logout" component={SignOut} />
+      </Stack.Navigator>
+    );
+    
+  }
+
 
   const EmergencyStackNavigator = () => {
     return (
@@ -97,4 +124,4 @@ useEffect(()=>{ass},[])
     );
   }
 
-export { MainStackNavigator, ContactStackNavigator, SettingsStackNavigator, EmergencyStackNavigator };
+export { MainStackNavigator, ContactStackNavigator, SettingsStackNavigator,HomeStackNavigator, EmergencyStackNavigator, SignoutStackNavigator };
